@@ -1,0 +1,5 @@
+# Netlify publishes site/ as it is (no build step). Headers and redirects are in site/_headers and
+# site/_redirects, so they also apply if the folder is dragged into Netlify by hand.
+[build]
+  publish = "site"
+  command = ""
