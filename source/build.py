@@ -140,6 +140,8 @@ def home():
 <li><h3>Search everything</h3><p>Typed text, handwriting and PDF text, across every notebook.</p></li>
 <li><h3>A map of your notes</h3><p>See notebooks, pages and tags as a map, and add your own thoughts and links.</p></li>
 <li><h3>Export when you need to</h3><p>Send a page or notebook as a PDF, with links that still work.</p></li>
+<li><h3>Photos and pictures</h3><p>Take a photo with your tablet or phone, or add a picture, and write on and around it.</p></li>
+<li><h3>Fill</h3><p>Tap inside a shape you've drawn to colour it in, under the ink.</p></li>
 <li><h3>Talk to text</h3><p>Dictate into a text box using your device's own speech recognition.</p></li>
 <li><h3>Sections and headers</h3><p>Split notebooks into sections and add a header and footer to every page.</p></li>
 <li><h3>Daily snapshots</h3><p>A snapshot of your notes each day, and backup files that stay encrypted.</p></li>
@@ -281,14 +283,15 @@ def privacy():
 <tr><td>Reading handwriting</td><td>On Windows, the app uses Windows' own handwriting recognition on your PC. On Android, it uses Google ML Kit on your device: the first time you turn it on, a language model is downloaded from Google. Your ink is read on the device and isn't sent anywhere.</td></tr>
 <tr><td>Talk to text</td><td>Uses your device's speech recognition (Windows voice typing, or Android's speech service). The app only receives the words. Microsoft or Google may process your voice under their own policies; on Android the app asks for on-device recognition first.</td></tr>
 <tr><td>Web pages and links</td><td>When you add a web page or open a link, the app loads that site as a browser would, and the site sees your connection as it would in a browser. It may set cookies in the app's web view, which you can clear on Windows.</td></tr>
+<tr><td>Photos and pictures</td><td>A photo you take or a picture you add is kept inside your notes, encrypted, like everything else. Before it's kept it is saved again, which leaves out the camera's details (such as where and when it was taken). On Android the photo is taken by your camera app, so MyPowerfulNotes doesn't need camera permission, and it only passes through the app's private storage on the way. On Windows the app uses the camera only while the Take a photo window is open, with your permission.</td></tr>
 <tr><td>Scanning a link code (Android)</td><td>Uses Google's code scanner in Google Play services. The app doesn't need camera permission and receives only the code.</td></tr>
 <tr><td>Sharing and exporting</td><td>When you export a PDF or share a file, a readable copy goes where you choose to send it. Temporary copies made for sharing are kept in the app's private storage and cleared.</td></tr>
 </tbody>
 </table>
 <p>The app doesn't include AI features that send your content to an AI service. If we add any, they'll only run when you start them on a page or notebook, and this policy will say which service receives what before they're released.</p>'''),
         ("permissions", "Permissions", '''<ul>
-<li><strong>Android:</strong> internet access (for sync, web pages and the handwriting model) and biometric access (to unlock with your fingerprint, face or PIN). The app doesn't ask for your contacts, location, camera or microphone.</li>
-<li><strong>Windows:</strong> the app runs in its own package and stores its files in its own app data folder.</li>
+<li><strong>Android:</strong> internet access (for sync, web pages and the handwriting model) and biometric access (to unlock with your fingerprint, face or PIN). The app doesn't ask for your contacts, location, camera or microphone: photos are taken by your camera app, and pictures are chosen with Android's own picker.</li>
+<li><strong>Windows:</strong> the app runs in its own package and stores its files in its own app data folder. It asks to use the camera only when you choose to take a photo.</li>
 </ul>'''),
         ("logs", "Problem logs", '''<p>If the app closes unexpectedly, it writes a short problem log on your device, with the app version, the device type and where the error happened. It never contains your notes. It stays on your device unless you choose to share it with us.</p>'''),
         ("website", "This website", '''<p>This website has no cookies, analytics or tracking. It's hosted by Netlify, which keeps standard server logs (such as IP addresses and the pages requested) to run and secure the service, under <a href="https://www.netlify.com/privacy/">Netlify's privacy policy</a>.</p>'''),
