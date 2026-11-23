@@ -15,7 +15,7 @@ DIST = os.path.join(HERE, "..", "site")
 BRAND = os.path.join(HERE, "..", "brand")
 ROOT = os.path.join(HERE, "..")
 SITE = "https://mypowerfulnotes.com"
-UPDATED = "19 November 2026"
+UPDATED = "23 November 2026"
 ISSUES = "https://github.com/joeljfraser-dotcom/notepen/issues"
 
 NAV = [("/#features", "Features", "features"), ("/#screens", "Screens", "screens"), ("/privacy", "Privacy", "privacy"),
@@ -260,7 +260,7 @@ def doc(path, title, description, current, intro, sections, show_updated=True):
 def privacy():
     s = [
         ("summary", "In short", f'''<div class="callout">
-<p>MyPowerfulNotes keeps your notes on your own devices, encrypted. We don't run a server, you don't make an account with us, and the app has no advertising, analytics or crash reporting. We can't see your notes, and we don't collect information about you.</p>
+<p>MyPowerfulNotes keeps your notes on your own devices, encrypted. We don't run a server, you don't make an account with us, and the app has no advertising, analytics or crash reporting of its own. We can't see your notes, and we don't collect information about you. On Android, two Google components the app uses (handwriting reading and the link code scanner) send Google basic diagnostic information about the device and app; never your notes (see <a href="#services">When the app uses other services</a>).</p>
 </div>
 <p>This policy explains what the app does with your information, including the few times it connects to other services, and only when you ask it to.</p>'''),
         ("who", "Who we are", f'''<p>MyPowerfulNotes ("the app", "we", "us") is an independent app for Windows and Android, developed in Australia. This policy covers the apps and this website.</p>
@@ -280,11 +280,11 @@ def privacy():
 <table>
 <thead><tr><th>Feature</th><th>What happens</th></tr></thead>
 <tbody>
-<tr><td>Reading handwriting</td><td>On Windows, the app uses Windows' own handwriting recognition on your PC. On Android, it uses Google ML Kit on your device: the first time you turn it on, a language model is downloaded from Google. Your ink is read on the device and isn't sent anywhere.</td></tr>
+<tr><td>Reading handwriting</td><td>On Windows, the app uses Windows' own handwriting recognition on your PC. On Android, it uses Google ML Kit on your device: the first time you turn it on, a language model is downloaded from Google. Your ink is read on the device and isn't sent anywhere. Reading is off until you turn it on. While it's on, ML Kit sends Google diagnostic and usage information about the device and the app (such as the device model, Android version, the app's name and version, and how well the feature performed), encrypted in transit. It doesn't include your ink or notes, and Google says it doesn't share it with third parties.</td></tr>
 <tr><td>Talk to text</td><td>Uses your device's speech recognition (Windows voice typing, or Android's speech service). The app only receives the words. Microsoft or Google may process your voice under their own policies; on Android the app asks for on-device recognition first.</td></tr>
 <tr><td>Web pages and links</td><td>When you add a web page or open a link, the app loads that site as a browser would, and the site sees your connection as it would in a browser. It may set cookies in the app's web view, which you can clear on Windows.</td></tr>
 <tr><td>Photos and pictures</td><td>A photo you take or a picture you add is kept inside your notes, encrypted, like everything else. Before it's kept it is saved again, which leaves out the camera's details (such as where and when it was taken). On Android the photo is taken by your camera app, so MyPowerfulNotes doesn't need camera permission, and it only passes through the app's private storage on the way. On Windows the app uses the camera only while the Take a photo window is open, with your permission.</td></tr>
-<tr><td>Scanning a link code (Android)</td><td>Uses Google's code scanner in Google Play services. The app doesn't need camera permission and receives only the code.</td></tr>
+<tr><td>Scanning a link code (Android)</td><td>Uses Google's code scanner in Google Play services. The app doesn't need camera permission and receives only the code. Google Play services may send Google similar diagnostic information about the scanner; it never sees your notes.</td></tr>
 <tr><td>Sharing and exporting</td><td>When you export a PDF or share a file, a readable copy goes where you choose to send it. Temporary copies made for sharing are kept in the app's private storage and cleared.</td></tr>
 </tbody>
 </table>
