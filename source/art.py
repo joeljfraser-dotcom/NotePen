@@ -14,8 +14,8 @@ ICONS = json.load(open(os.path.join(HERE, "icons.json")))
 
 TEXT = "#1B1B1B"
 TEXT2 = "#5C6670"
-ACCENT = "#005FB8"
-SOFT = "#E3EEF8"
+ACCENT = "#0E6E66"
+SOFT = "#E1F1EF"
 BAR = "#FAFAFA"
 BORDER = "#E1E1E1"
 DESK = "#E9EDF2"
@@ -212,13 +212,16 @@ def phone(w, h, body, uid):
 <circle cx="{w / 2}" cy="{b + 13}" r="5" fill="#202327"/>'''
 
 
+_logo_count = [0]
+
+
 def logo_small(x, y, s):
+    """The brand mark (brand.py's small version), placed at x, y, s units across."""
+    import brand
+    _logo_count[0] += 1
     k = s / 512
-    return f'''<g transform="translate({x} {y}) scale({k:.5f})">
-<rect width="512" height="512" rx="116" fill="{ACCENT}"/>
-<path d="M150 108 H310 L364 162 V386 Q364 404 346 404 H168 Q150 404 150 386 V126 Q150 108 168 108 Z" fill="#fff"/>
-<path d="M186 336 C192 300 198 246 210 214 C214 204 222 206 224 216 C230 248 236 288 246 310 C250 318 256 318 260 308 C270 280 278 238 288 214 C292 204 300 206 302 216 C306 246 308 296 316 330 C320 344 332 344 340 330" fill="none" stroke="{ACCENT}" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
-</g>'''
+    return (f'<g transform="translate({x} {y}) scale({k:.5f})">'
+            + brand.mark_body(small=True, ids=f"ls{_logo_count[0]}") + "</g>")
 
 
 def tool(name, x, y, on=False, size=20):

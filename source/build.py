@@ -36,7 +36,7 @@ def head(title, description, path):
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#005FB8">
+<meta name="theme-color" content="#0E6E66">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MyPowerfulNotes">
 <meta property="og:title" content="{full}">
@@ -474,10 +474,10 @@ def og_image(out):
     page = page.replace('class="writing', 'class="done')
     logo = open(os.path.join(BRAND, "mark.svg")).read().replace("<svg ", '<svg x="80" y="86" width="64" height="64" ', 1)
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-<defs><pattern id="d" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#CDD6E0"/></pattern></defs>
-<rect width="1200" height="630" fill="#F2F4F7"/><rect width="1200" height="630" fill="url(#d)"/>
+<defs><pattern id="d" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#CFD8D6"/></pattern></defs>
+<rect width="1200" height="630" fill="#F2F4F3"/><rect width="1200" height="630" fill="url(#d)"/>
 {logo}
-<text x="160" y="129" font-family="Inter" font-weight="600" font-size="30" fill="#1B1B1B">My<tspan fill="#005FB8">Powerful</tspan>Notes</text>
+<text x="160" y="129" font-family="Inter" font-weight="600" font-size="30" fill="#1B1B1B">My<tspan fill="#0E6E66">Powerful</tspan>Notes</text>
 <text font-family="Inter Display" font-weight="600" font-size="58" fill="#1B1B1B" letter-spacing="-1.2">
 <tspan x="80" y="262">Handwritten notes on</tspan><tspan x="80" y="330">proper pages, on your</tspan><tspan x="80" y="398">PC and your tablet.</tspan></text>
 <text x="80" y="470" font-family="Inter" font-size="24" fill="#4D5865">Windows and Android. Encrypted on your devices.</text>
@@ -535,7 +535,7 @@ def main():
         + "".join(f"<url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
     open(os.path.join(DIST, "site.webmanifest"), "w").write(
         '{"name":"MyPowerfulNotes","short_name":"MyPowerfulNotes","icons":[{"src":"/icon-192.png","sizes":"192x192","type":"image/png"},'
-        '{"src":"/icon-512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#005FB8","background_color":"#F2F4F7","display":"browser"}\n')
+        '{"src":"/icon-512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#0E6E66","background_color":"#F2F4F3","display":"browser"}\n')
     print("built", sorted(os.listdir(DIST)))
 
 

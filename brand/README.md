@@ -1,8 +1,12 @@
 # MyPowerfulNotes brand
 
 ## The mark
-An A4 page with a handwritten **M** and a small spark, on a rounded Windows-blue tile.
-The page and pen stroke say what the app is (handwriting on proper pages); the spark is the "powerful" part.
+An A4 page with a handwritten **M**, finished by a pencil leaning right, on a rounded deep teal tile (Nov 2026).
+The page and pen stroke say what the app is: handwriting on proper pages. The earlier blue tile had a four-point
+spark, dropped because it looked too like Gemini's.
+
+Every file here is made by `source/brand.py` (run from the repo root, then `source/build.py` for the site).
+Change the mark or colours there, not in the files.
 
 | File | Use |
 |---|---|
@@ -21,19 +25,11 @@ The Android launcher icon (adaptive, with a themed version) is drawn from the sa
 ## Colours
 | Name | Hex | Use |
 |---|---|---|
-| Ink blue | `#005FB8` | The accent: buttons, links, the "Powerful" in the name (Windows 11 accent blue) |
-| Deep ink | `#00478F` | Tile gradient end, hover |
-| Tile light | `#1A7FD9` | Tile gradient start |
+| Teal | `#0E6E66` | The accent: buttons, links, the M, the "Powerful" in the name |
+| Deep teal | `#0B4F4A` | Tile gradient end, hover |
+| Tile light | `#14857C` | Tile gradient start |
+| Pencil | `#FFB02E` | The pencil (eraser `#F06A6A`, wood `#F6E3C4`, lead `#22303F`) |
+| Paper | `#FFFDF8` | The page in the mark (fold `#E4E1D8`, rules `#E2E4E6`) |
 | Text | `#1B1B1B` | Body text and the name |
 | Secondary text | `#4D5865` | |
-| Desk | `#F2F4F7` | Backgrounds behind paper |
-| Rule | `#DCE6F0` | Ruled lines, borders on paper |
-| Measure | `#4F7C93` | Drawing-tool lengths and angles |
-| Highlighter | `#FFD400` | Highlights only |
-
-## Type
-**Inter** (SIL Open Font License), the same font as the Android app: Semibold for headings and the name,
-Regular for text. On the website, headings use Inter Display Semibold.
-
-## Spelling
-Always one word with capital M, P and N: **MyPowerfulNotes**. Not "My Powerful Notes", "Mypowerfulnotes" or "MPN".
+| Desk | `#F2F4F3` | Backgrounds behind paper |

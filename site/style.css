@@ -5,12 +5,12 @@
 @font-face { font-family: "Inter Display"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fonts/interdisplay-semibold.woff") format("woff"); }
 
 :root {
-  --ink: #005FB8;
-  --ink-strong: #004A8F;
-  --ink-soft: #E3EEF8;
+  --ink: #0E6E66;
+  --ink-strong: #0B4F4A;
+  --ink-soft: #E1F1EF;
   --text: #1B1B1B;
   --text-2: #4D5865;
-  --desk: #F2F4F7;
+  --desk: #F2F4F3;
   --paper: #FFFFFF;
   --line: #E1E5EA;
   --dim: #4F7C93;
@@ -59,7 +59,7 @@ p { margin: 0 0 1em; }
 .button.quiet:hover { border-color: var(--ink); color: var(--ink); }
 
 /* Hero: a sheet of paper on the desk, with dot paper behind */
-.hero { background-color: var(--desk); background-image: radial-gradient(#CDD6E0 1px, transparent 1.2px); background-size: 22px 22px; border-bottom: 1px solid var(--line); overflow: hidden; }
+.hero { background-color: var(--desk); background-image: radial-gradient(#CFD8D6 1px, transparent 1.2px); background-size: 22px 22px; border-bottom: 1px solid var(--line); overflow: hidden; }
 .hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 56px; align-items: center; padding-top: 72px; padding-bottom: 0; }
 .hero-copy { padding-bottom: 72px; }
 .hero h1 { max-width: 13ch; }
