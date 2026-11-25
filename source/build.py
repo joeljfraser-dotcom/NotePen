@@ -4,6 +4,7 @@
 
 Pages share one header and footer. Illustrations come from art.py; the logo from brand/.
 """
+import json
 import os
 import shutil
 import subprocess
@@ -18,7 +19,7 @@ SITE = "https://mypowerfulnotes.com"
 UPDATED = "23 November 2026"
 ISSUES = "https://github.com/joeljfraser-dotcom/notepen/issues"
 
-NAV = [("/#features", "Features", "features"), ("/#screens", "Screens", "screens"), ("/privacy", "Privacy", "privacy"),
+NAV = [("/#features", "Features", "features"), ("/#screens", "Screens", "screens"), ("/try", "Try it", "try"), ("/privacy", "Privacy", "privacy"),
        ("/support", "Support", "support")]
 
 
@@ -100,7 +101,7 @@ def home():
 <p class="lead">Write with your pen on A4 paper, mark up PDFs, draw to scale and turn ticked boxes into a to-do list. Your notes are encrypted on your own devices, and nobody else can read them.</p>
 <div class="buttons">
 <a class="button primary" href="#features">See what it does</a>
-<a class="button quiet" href="#privacy">How your notes stay private</a>
+<a class="button quiet" href="/try">Try it in your browser</a>
 </div>
 <p class="note">For Windows 11 and Android 11 or later. Free while it's being tested.</p>
 </div>
@@ -141,12 +142,10 @@ def home():
 <li><h3>A map of your notes</h3><p>See notebooks, pages and tags as a map, and add your own thoughts and links.</p></li>
 <li><h3>Export when you need to</h3><p>Send a page or notebook as a PDF, with links that still work.</p></li>
 <li><h3>Photos and pictures</h3><p>Take a photo with your tablet or phone, or add a picture, and write on and around it.</p></li>
-<li><h3>Fill</h3><p>Tap inside a shape you've drawn to colour it in, under the ink.</p></li>
 <li><h3>Talk to text</h3><p>Dictate into a text box using your device's own speech recognition.</p></li>
 <li><h3>Woodwork add-in</h3><p>Parts, materials, cut lists, sheet and board layouts, a drawer planner and proportion guides.</p></li>
-<li><h3>From Fusion 360</h3><p>Bring in a DXF drawing or a parts list (CSV) and carry on drawing over it.</p></li>
 <li><h3>Pocket recordings</h3><p>Bring in Pocket transcripts with their summary, and their action items as flags.</p></li>
-<li><h3>Word and PowerPoint</h3><p>Office on your PC turns a document or deck into pages to write on.</p></li>
+<li><h3>Word and PowerPoint</h3><p>On Windows, Office on your PC turns a document or deck into pages to write on.</p></li>
 <li><h3>Sections and headers</h3><p>Split notebooks into sections and add a header and footer to every page.</p></li>
 <li><h3>Daily snapshots</h3><p>A snapshot of your notes each day, and backup files that stay encrypted.</p></li>
 </ul>
@@ -440,6 +439,106 @@ def not_found():
 # Assets
 # =================================================================================================================
 
+# =================================================================================================================
+# Try it: the app in the browser (static/try.js does the work)
+# =================================================================================================================
+
+TRY_ICONS = json.load(open(os.path.join(HERE, "try_icons.json")))
+
+
+def ic(name):
+    return (f'<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="{TRY_ICONS[name]}" fill="none" stroke="currentColor" '
+            'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+
+
+def tb(name, label, attrs, extra=""):
+    return f'<button type="button" class="tb{extra}" {attrs} title="{label}" aria-label="{label}">{ic(name)}</button>'
+
+
+def try_page():
+    tools = [("PEN", "Pen (pressure sensitive)", "pen"), ("FINELINER", "Fineliner (even width)", "fine"),
+             ("HIGHLIGHTER", "Highlighter", "hl"), ("ERASER", "Eraser: touch a stroke to rub it out", "eraser"),
+             ("TEXT", "Text: tap the page to type", "text"), ("FLAG", "Flag an action: drag across handwriting", "flag"),
+             ("DRAWING", "Scale drawing", "draw")]
+    tool_html = "".join(tb(i, l, f'data-tool="{t}" aria-pressed="false"') for i, l, t in tools)
+    colours = [("#111111", "Black"), ("#1F4FBF", "Blue"), ("#C62828", "Red"), ("#2E7D32", "Green"), ("#FFD400", "Yellow")]
+    colour_html = "".join(f'<button type="button" class="sw" data-colour="{c}" title="{n}" aria-label="{n}" aria-pressed="false"><span data-c="{c}"></span></button>' for c, n in colours)
+    width_html = "".join(f'<button type="button" class="wd" data-width="{i}" title="{n}" aria-label="{n}" aria-pressed="false"><span class="dot{i}"></span></button>' for i, n in enumerate(["Fine", "Medium", "Bold"]))
+    scales = "".join(f'<option value="{k}"{" selected" if k == 10 else ""}>1:{k}</option>' for k in (1, 2, 5, 10, 20, 25, 50, 100, 200))
+    papers = "".join(f'<button type="button" data-paper="{p}">{p}</button>' for p in ("Ruled", "Grid", "Dots", "Cornell", "Isometric", "Three views", "Blank"))
+    dashes = "".join(f'<button type="button" data-dash="{d}"><span class="ltsample" data-dash="{d}"></span>{n}</button>'
+                     for d, n in (("", "Solid"), ("dash", "Dashed"), ("dot", "Dotted"), ("dashdot", "Dash-dot")))
+    main = f'''
+<section class="try-head">
+<div class="wrap">
+<h1>Try it in your browser</h1>
+<p class="lead">A working copy of the app's page, pens and drawing tools, laid out as on Windows and on Android. Write with a mouse, pen or finger. Nothing you do here leaves your browser, and it's gone when you close the page.</p>
+<div class="device-switch" role="group" aria-label="Show the app as on">
+<button type="button" data-device="windows" aria-pressed="true">Windows</button>
+<button type="button" data-device="tablet" aria-pressed="false">Android tablet</button>
+<button type="button" data-device="phone" aria-pressed="false">Android phone</button>
+</div>
+</div>
+</section>
+<section class="try-stage">
+<div class="wrap">
+<div class="app" id="app" data-device="windows">
+<div class="a-title"><img src="/favicon.svg" alt="" width="16" height="16"><span>MyPowerfulNotes</span><i class="wc"><b></b><b></b><b></b></i></div>
+<div class="a-bar">
+<span class="tb back" aria-hidden="true">{ic("LEFT")}</span>
+<div class="a-name"><small>Try it</small><strong id="pageTitle">Page 1</strong></div>
+</div>
+<div class="a-tools" role="toolbar" aria-label="Tools">
+<span class="grp places">{tb("PAGES", "Page thumbnails", 'data-act="pages" aria-pressed="true"')}</span>
+<span class="grp">{tool_html}</span>
+<span class="grp">{colour_html}</span>
+<span class="grp widths">{width_html}</span>
+<span class="grp">{tb("UNDO", "Undo (Ctrl+Z)", 'data-act="undo"')}{tb("REDO", "Redo (Ctrl+Y)", 'data-act="redo"')}</span>
+<span class="grp nav">{tb("LEFT", "Previous page", 'data-act="prev"')}<span class="count" id="pageCount">1 / 1</span>{tb("RIGHT", "Next page", 'data-act="next"')}{tb("PAGE_ADD", "Add a page after this one", 'data-act="add"')}</span>
+<span class="grp end">{tb("ACTIONS", "Actions: every flag, from every page", 'data-act="actions" aria-pressed="false"')}{tb("PAPERS", "Paper", 'data-menu="paperMenu"')}{tb("FIT", "Fit the page or the width", 'data-act="fit"')}</span>
+</div>
+<div class="cadbar" id="cadbar" hidden>
+<div class="cad-head"><span class="grip" id="cadGrip" title="Drag to move the drawing bar">{ic("GRIP")}</span><button type="button" class="mini" id="cadDock" title="Float or dock the drawing bar" aria-label="Float or dock the drawing bar">{ic("FLOAT")}</button></div>
+<div class="cad-row">
+<select id="cadScale" title="Scale" aria-label="Scale">{scales}</select>
+<select id="cadUnits" title="Units" aria-label="Units"><option value="mm">mm</option><option value="m">m</option></select>
+<span class="seg">{tb("LINE", "Draw lines: click, click, click. Esc or double-click stops", 'data-mode="line" aria-pressed="true"')}{tb("RECT", "Rectangle: drag from corner to corner", 'data-mode="rect" aria-pressed="false"')}{tb("SELECT", "Select a line", 'data-mode="select" aria-pressed="false"')}{tb("MEASURE", "Measure: tap two points, and the distance is kept on the drawing", 'data-mode="measure" aria-pressed="false"')}</span>
+<input id="cadLen" inputmode="decimal" title="Length" aria-label="Length" placeholder="Length">
+<input id="cadAng" inputmode="decimal" title="Angle in degrees" aria-label="Angle" placeholder="0°">
+{tb("PLUS", "Add the line: the length and angle typed, from the last point", 'id="cadAdd"')}
+{tb("EDIT", "Edit length: give the selected line the length typed", 'id="cadEdit"')}
+{tb("TRASH", "Delete the selected line", 'id="cadDel"')}
+<button type="button" class="tb lt" data-menu="lineMenu" title="Line type" aria-label="Line type"><span class="ltsample" id="ltSample" data-dash=""></span></button>
+{tb("EYE", "Show lengths, measurements and parts", 'data-menu="showMenu"')}
+{tb("WOOD", "Woodwork", 'data-menu="woodMenu"', " wood")}
+</div>
+</div>
+<div class="a-body">
+<aside class="pages" id="pages" aria-label="Pages"></aside>
+<div class="desk" id="desk"><div class="sheet" id="sheet"><canvas id="cv" aria-label="The page"></canvas></div></div>
+<aside class="actions" id="actions" hidden aria-label="Actions"><div class="act-head"><h2>Actions</h2><button type="button" class="tb" id="actionsClose" title="Close" aria-label="Close the Actions list">{ic("CLOSE")}</button></div><ul id="actionList"></ul><p class="empty" id="actionEmpty">Flag a line of writing with the flag tool and it appears here.</p></aside>
+</div>
+<div class="a-hint" id="hint" aria-live="polite">Pick a pen and write on the page.</div>
+<div class="menu" id="paperMenu" hidden>{papers}</div>
+<div class="menu" id="lineMenu" hidden>{dashes}</div>
+<div class="menu" id="showMenu" hidden><label><input type="checkbox" id="showLengths" checked> Lengths</label><label><input type="checkbox" id="showMeasures" checked> Measurements</label><label><input type="checkbox" id="showParts" checked> Parts</label></div>
+<div class="menu" id="woodMenu" hidden>
+<button type="button" data-wood="part">Make a part (tap inside a shape)…</button>
+<button type="button" data-wood="drawers">Plan drawers (tap the opening)…</button>
+<hr><button type="button" data-wood="thirds">Proportion guides: thirds</button><button type="button" data-wood="golden">Proportion guides: golden ratio</button><button type="button" data-wood="noguides">Remove the guides</button>
+<hr><button type="button" data-wood="cutlist">Make a cut list…</button>
+</div>
+<form class="ask" id="ask" hidden><label id="askLabel" for="askInput">Name</label><input id="askInput" autocomplete="off"><div><button type="button" id="askCancel">Cancel</button><button type="submit" class="ok">OK</button></div></form>
+</div>
+<p class="try-note">The app itself also has notebooks and sections, PDFs, tables, sticky notes, pictures, the notes map, search, handwriting reading, encryption and sync. This page shows the page and its tools. <a href="/#features">See everything it does</a>.</p>
+</div>
+</section>
+<noscript><div class="wrap"><p>The demo needs JavaScript. The rest of this site works without it.</p></div></noscript>
+<script src="/try.js" defer></script>
+'''
+    return page("/try", "Try it", "Write, highlight, flag actions and draw to scale in your browser, laid out as MyPowerfulNotes is on Windows and Android.", "try", main)
+
+
 def run(cmd):
     subprocess.run(cmd, check=True)
 
@@ -505,7 +604,7 @@ NETLIFY_TOML = """# Netlify publishes site/ as it is (no build step). Headers an
 """
 
 HEADERS = """/*
-  Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'self'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'none'; script-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
@@ -527,10 +626,11 @@ def main():
         shutil.rmtree(DIST)
     os.makedirs(os.path.join(DIST, "fonts"))
     pages = {"index.html": home(), "privacy.html": privacy(), "terms.html": terms(), "support.html": support(),
-             "licences.html": licences(), "404.html": not_found()}
+             "licences.html": licences(), "404.html": not_found(), "try.html": try_page()}
     for name, html in pages.items():
         open(os.path.join(DIST, name), "w").write(html)
     shutil.copy(os.path.join(HERE, "static", "style.css"), DIST)
+    shutil.copy(os.path.join(HERE, "static", "try.js"), DIST)
     shutil.copy(os.path.join(HERE, "static", "fonts", "OFL.txt"), os.path.join(DIST, "fonts"))
     fonts(os.path.join(DIST, "fonts"))
     icons(DIST)
@@ -539,7 +639,7 @@ def main():
     open(os.path.join(DIST, "_headers"), "w").write(HEADERS)
     open(os.path.join(DIST, "_redirects"), "w").write(REDIRECTS)
     open(os.path.join(DIST, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
-    urls = ["/", "/privacy", "/terms", "/support", "/licences"]
+    urls = ["/", "/try", "/privacy", "/terms", "/support", "/licences"]
     open(os.path.join(DIST, "sitemap.xml"), "w").write(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"<url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
