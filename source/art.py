@@ -12,15 +12,15 @@ import ink
 HERE = os.path.dirname(os.path.abspath(__file__))
 ICONS = json.load(open(os.path.join(HERE, "icons.json")))
 
-TEXT = "#1B1B1B"
+TEXT = "#1E242B"
 TEXT2 = "#5C6670"
 ACCENT = "#0E6E66"
-SOFT = "#E1F1EF"
+SOFT = "#E3F1EF"
 BAR = "#FAFAFA"
 BORDER = "#E1E1E1"
-DESK = "#E9EDF2"
+DESK = "#ECECE8"
 RULE = "#D6E1EC"
-INK = "#1B1B1B"
+INK = "#1E242B"
 BLUE_INK = "#1F4FBF"
 RED = "#C62828"
 GREEN = "#2E7D32"

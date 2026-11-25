@@ -1,4 +1,4 @@
-/* MyPowerfulNotes: the app's own look on the web. Windows blue ink, white paper on a cool desk, Inter. */
+/* MyPowerfulNotes: the app's own look on the web. graphite and teal, white paper on a warm grey desk, Inter. */
 
 @font-face { font-family: "Inter"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/inter-regular.woff") format("woff"); }
 @font-face { font-family: "Inter"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fonts/inter-semibold.woff") format("woff"); }
@@ -7,14 +7,16 @@
 :root {
   --ink: #0E6E66;
   --ink-strong: #0B4F4A;
-  --ink-soft: #E1F1EF;
-  --text: #1B1B1B;
-  --text-2: #4D5865;
-  --desk: #F2F4F3;
+  --ink-soft: #E3F1EF;
+  --text: #1E242B;
+  --text-2: #4A535C;
+  --desk: #F3F3F0;
   --paper: #FFFFFF;
-  --line: #E1E5EA;
+  --line: #E6E8E6;
   --dim: #4F7C93;
   --highlight: #FFE45C;
+  --graphite: #1E242B;
+  --graphite-2: #2B323A;
   --body: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
   --display: "Inter Display", "Inter", "Segoe UI", system-ui, sans-serif;
   --wrap: 1160px;
@@ -55,11 +57,11 @@ p { margin: 0 0 1em; }
 .button { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 6px; font-weight: 600; font-size: 15.5px; text-decoration: none; border: 1px solid transparent; }
 .button.primary { background: var(--ink); color: #fff; }
 .button.primary:hover { background: var(--ink-strong); color: #fff; }
-.button.quiet { background: var(--paper); color: var(--text); border-color: #C9D1DA; }
+.button.quiet { background: var(--paper); color: var(--text); border-color: #CBD1CF; }
 .button.quiet:hover { border-color: var(--ink); color: var(--ink); }
 
 /* Hero: a sheet of paper on the desk, with dot paper behind */
-.hero { background-color: var(--desk); background-image: radial-gradient(#CFD8D6 1px, transparent 1.2px); background-size: 22px 22px; border-bottom: 1px solid var(--line); overflow: hidden; }
+.hero { background-color: var(--desk); background-image: radial-gradient(#D6D8D4 1px, transparent 1.2px); background-size: 22px 22px; border-bottom: 1px solid var(--line); overflow: hidden; }
 .hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 56px; align-items: center; padding-top: 72px; padding-bottom: 0; }
 .hero-copy { padding-bottom: 72px; }
 .hero h1 { max-width: 13ch; }
@@ -133,11 +135,11 @@ p { margin: 0 0 1em; }
 .platform h3 { font-size: 21px; margin-bottom: 10px; }
 .platform ul { margin: 14px 0 0; padding-left: 20px; color: var(--text-2); }
 .platform li { margin: 6px 0; }
-.status { margin-top: 56px; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; justify-content: space-between; padding: 28px 32px; border-radius: 12px; background: var(--ink); color: #fff; }
+.status { margin-top: 56px; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; justify-content: space-between; padding: 28px 32px; border-radius: 12px; background: var(--graphite); color: #fff; }
 .status p { margin: 0; max-width: 60ch; }
 .status strong { display: block; font-size: 19px; margin-bottom: 4px; }
-.status .button { background: #fff; color: var(--ink); }
-.status .button:hover { background: var(--ink-soft); color: var(--ink-strong); }
+.status .button { background: var(--ink); color: #fff; }
+.status .button:hover { background: #14857C; color: #fff; }
 
 /* Documents (privacy, terms, support, licences) */
 .doc { padding: 64px 0 104px; }
@@ -171,11 +173,14 @@ details p, details ul, details ol { color: var(--text-2); }
 .licence { white-space: pre-wrap; font-size: 13px; line-height: 1.5; background: var(--desk); padding: 18px; border-radius: 8px; overflow-x: auto; }
 
 /* Footer */
-.site-foot { border-top: 1px solid var(--line); background: var(--desk); padding: 40px 0 48px; font-size: 14.5px; color: var(--text-2); }
+.site-foot { background: var(--graphite); padding: 40px 0 48px; font-size: 14.5px; color: #C9D0D6; }
 .site-foot .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; align-items: center; }
 .site-foot nav { display: flex; gap: 22px; flex-wrap: wrap; }
-.site-foot a { color: var(--text-2); }
-.site-foot a:hover { color: var(--ink); }
+.site-foot a { color: #C9D0D6; }
+.site-foot a:hover { color: #7FD1C7; }
+.site-foot .brand { color: #F2F4F5; }
+.site-foot .brand b { color: #7FD1C7; }
+.site-foot :focus-visible { outline-color: #7FD1C7; }
 
 .not-found { padding: 120px 0; }
 .not-found p { color: var(--text-2); font-size: 18px; margin-top: 16px; }

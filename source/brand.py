@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Makes every file in brand/ from one description of the mark (deep teal, Nov 2026).
+"""Makes every file in brand/ from one description of the mark (graphite and teal, Nov 2026).
 
-The mark: an A4 page with a handwritten M, finished by a pencil leaning right, on a rounded deep teal tile.
+The mark: an A4 page with three lines of handwriting and a teal stylus, on a rounded graphite tile.
 Run from the repo root:  python3 source/brand.py   (needs rsvg-convert, ImageMagick and the Inter fonts).
 Then run source/build.py, which copies the mark into the site.
 """
@@ -19,69 +19,67 @@ BRAND = os.path.join(ROOT, "brand")
 FONTS = "/usr/share/fonts/opentype/inter/"
 
 # ---- Colours ----
-TILE_LIGHT = "#14857C"
-TILE_DEEP = "#0B4F4A"
-TEAL = "#0E6E66"          # the accent: the M, links, "Powerful"
-TEAL_LIGHT = "#13897F"
-TEXT = "#1B1B1B"
+TILE_LIGHT = "#3A424C"    # graphite tile, top left
+TILE_DEEP = "#1A1F25"     # graphite tile, bottom right
+GRAPHITE = "#26323F"      # handwriting on the page
+TEAL = "#0E6E66"          # the accent: the stylus, the middle line, links, "Powerful"
+TEAL_BAND = "#E9F5F3"
+TEXT = "#1E242B"
 PAPER = "#FFFDF8"
 FOLD = "#E4E1D8"
-RULE = "#E2E4E6"
-PENCIL = "#FFB02E"
-ERASER = "#F06A6A"
-WOOD = "#F6E3C4"
-LEAD = "#22303F"
+TIP_GREY = "#C9D3D2"
+POINT_INK = "#26323F"
 
 PAGE = "M150 108 H310 L364 162 V386 Q364 404 346 404 H168 Q150 404 150 386 V126 Q150 108 168 108 Z"
 CORNER = "M310 108 V146 Q310 162 326 162 H364 Z"
-M_STROKE = ("M186 336 C192 300 198 246 210 214 C214 204 222 206 224 216 C230 248 236 288 246 310 "
-            "C250 318 256 318 260 308 C270 280 278 238 288 214 C292 204 300 206 302 216 "
-            "C306 246 308 296 316 330 C320 344 332 344 340 330")
-# The pencil, drawn pointing down at (0, 0) and placed where the M ends, leaning right.
-PENCIL_AT = "translate(344 322) rotate(35)"
-BODY = "M-8 -150 H8 Q15 -150 15 -143 V-32 H-15 V-143 Q-15 -150 -8 -150 Z"
-CAP = "M-8 -150 H8 Q15 -150 15 -143 V-130 H-15 V-143 Q-15 -150 -8 -150 Z"
-TIP = "M-15 -32 L15 -32 L0 6 Z"
-POINT = "M-5.3 -6 L5.3 -6 L0 6 Z"
+# Three lines of handwriting: graphite, teal, graphite. The last ends where the stylus touches the page.
+LINES = [
+    ("M180 206 C192 186 200 220 212 204 S230 188 242 206 S262 220 274 202 S298 192 330 204", GRAPHITE),
+    ("M180 262 C196 242 206 276 220 258 S244 244 258 262 S288 270 318 256", TEAL),
+    ("M180 318 C194 300 206 332 220 314 S246 300 262 318 S286 326 300 318", GRAPHITE),
+]
+# Small sizes: smoother, heavier lines that stay readable at 16 to 48 px.
+LINES_SMALL = [
+    ("M182 206 C210 192 240 220 270 204 S316 196 330 204", GRAPHITE),
+    ("M182 262 C210 248 240 276 270 260 S306 254 318 256", TEAL),
+    ("M182 318 C206 304 232 332 258 316 S290 314 300 318", GRAPHITE),
+]
+# The stylus, drawn pointing down at (0, 0) and placed where the last line ends, leaning right.
+STYLUS_AT = "translate(300 318) rotate(35)"
+BARREL = "M-11 -176 Q-11 -188 0 -188 Q11 -188 11 -176 V-38 H-11 Z"
+BAND = "M-11 -64 H11 V-52 H-11 Z"
+CONE = "M-11 -38 H11 L2.5 -2 Q0 1 -2.5 -2 Z"
 
 
-def pencil(small=False):
+def stylus(small=False):
     if small:
-        # Fewer details for 16 to 32 px: no eraser, a heavier outline.
-        return (f'<g transform="{PENCIL_AT}">'
-                f'<path d="{BODY}" fill="{PENCIL}" stroke="#FFFFFF" stroke-width="8" stroke-linejoin="round"/>'
-                f'<path d="{TIP}" fill="{WOOD}" stroke="{LEAD}" stroke-width="7" stroke-linejoin="round"/>'
-                f'<path d="{POINT}" fill="{LEAD}"/></g>')
-    return (f'<g transform="{PENCIL_AT}">'
-            f'<path d="{BODY}" fill="{PENCIL}"/><path d="{CAP}" fill="{ERASER}"/>'
-            f'<path d="M-15 -130 H15" stroke="#FFFFFF" stroke-width="4"/>'
-            f'<path d="{BODY}" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linejoin="round"/>'
-            f'<path d="{TIP}" fill="{WOOD}" stroke="{LEAD}" stroke-width="5" stroke-linejoin="round"/>'
-            f'<path d="{POINT}" fill="{LEAD}"/></g>')
+        return (f'<g transform="{STYLUS_AT}"><path d="{BARREL}" fill="{TEAL}" stroke="{PAPER}" stroke-width="6" '
+                f'stroke-linejoin="round"/><path d="{CONE}" fill="{TIP_GREY}"/></g>')
+    return (f'<g transform="{STYLUS_AT}">'
+            f'<path d="{BARREL}" fill="{TEAL}" stroke="{PAPER}" stroke-width="4" stroke-linejoin="round"/>'
+            f'<path d="{BAND}" fill="{TEAL_BAND}"/>'
+            f'<path d="{CONE}" fill="{TIP_GREY}"/>'
+            f'<circle cx="0" cy="-3" r="2.6" fill="{POINT_INK}"/></g>')
 
 
 def mark_body(small=False, tile=True, square=False, ids="m"):
     """The mark's SVG content in a 512-unit box. ids keeps gradient ids unique when marks share a file."""
     rx = "0" if square else "116"
-    rules = "" if small else (
-        f'<g stroke="{RULE}" stroke-width="5" stroke-linecap="round">'
-        + "".join(f'<line x1="176" y1="{y}" x2="338" y2="{y}"/>' for y in (214, 262, 310, 358)) + "</g>")
     defs = (f'<defs><linearGradient id="{ids}tile" x1="0" y1="0" x2="1" y2="1">'
-            f'<stop offset="0" stop-color="{TILE_LIGHT}"/><stop offset="1" stop-color="{TILE_DEEP}"/></linearGradient>'
-            f'<linearGradient id="{ids}ink" x1="0" y1="1" x2="1" y2="0">'
-            f'<stop offset="0" stop-color="{TEAL}"/><stop offset="1" stop-color="{TEAL_LIGHT}"/></linearGradient></defs>')
+            f'<stop offset="0" stop-color="{TILE_LIGHT}"/><stop offset="1" stop-color="{TILE_DEEP}"/></linearGradient></defs>')
     back = f'<rect width="512" height="512" rx="{rx}" fill="url(#{ids}tile)"/>' if tile else ""
+    width = 20 if small else 13
+    lines = "".join(f'<path d="{d}" stroke="{c}"/>' for d, c in (LINES_SMALL if small else LINES))
     return (defs + back +
             '<g transform="translate(256 262) scale(1.1) translate(-257 -256)">'
-            f'<path d="{PAGE}" fill="{PAPER}"/><path d="{CORNER}" fill="{FOLD}"/>{rules}'
-            f'<path d="{M_STROKE}" fill="none" stroke="url(#{ids}ink)" stroke-width="{28 if small else 20}" '
-            'stroke-linecap="round" stroke-linejoin="round"/>'
-            f'{pencil(small)}</g>')
+            f'<path d="{PAGE}" fill="{PAPER}"/><path d="{CORNER}" fill="{FOLD}"/>'
+            f'<g fill="none" stroke-width="{width}" stroke-linecap="round" stroke-linejoin="round">{lines}</g>'
+            f'{stylus(small)}</g>')
 
 
 def mark_svg(small=False, square=False):
     return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">\n'
-            '<!-- MyPowerfulNotes: an A4 page with a handwritten M, finished by a pencil, on a deep teal tile. -->\n'
+            '<!-- MyPowerfulNotes: an A4 page with handwriting and a teal stylus, on a graphite tile. -->\n'
             + mark_body(small, square=square) + "\n</svg>\n")
 
 
@@ -135,10 +133,10 @@ def feature_graphic(path):
     head, _ = text_paths([("Handwritten notes on", TEXT)], 48, 68, 208, "InterDisplay-SemiBold.otf")
     head2, _ = text_paths([("proper pages, on your", TEXT)], 48, 68, 266, "InterDisplay-SemiBold.otf")
     head3, _ = text_paths([("PC and your tablet.", TEXT)], 48, 68, 324, "InterDisplay-SemiBold.otf")
-    sub, _ = text_paths([("Windows and Android. Encrypted on your devices.", "#4D5865")], 21, 68, 384, "Inter-Regular.otf")
+    sub, _ = text_paths([("Windows and Android. Encrypted on your devices.", "#4A535C")], 21, 68, 384, "Inter-Regular.otf")
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500">
-<defs><pattern id="d" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#CFD8D6"/></pattern></defs>
-<rect width="1024" height="500" fill="#F2F4F3"/><rect width="1024" height="500" fill="url(#d)"/>
+<defs><pattern id="d" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#D6D8D4"/></pattern></defs>
+<rect width="1024" height="500" fill="#F3F3F0"/><rect width="1024" height="500" fill="url(#d)"/>
 {logo}{name}{head}{head2}{head3}{sub}
 <g transform="rotate(-2.5 785 300)">{page}</g>
 </svg>'''

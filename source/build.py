@@ -36,7 +36,7 @@ def head(title, description, path):
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#0E6E66">
+<meta name="theme-color" content="#1E242B">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MyPowerfulNotes">
 <meta property="og:title" content="{full}">
@@ -474,13 +474,13 @@ def og_image(out):
     page = page.replace('class="writing', 'class="done')
     logo = open(os.path.join(BRAND, "mark.svg")).read().replace("<svg ", '<svg x="80" y="86" width="64" height="64" ', 1)
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-<defs><pattern id="d" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#CFD8D6"/></pattern></defs>
-<rect width="1200" height="630" fill="#F2F4F3"/><rect width="1200" height="630" fill="url(#d)"/>
+<defs><pattern id="d" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r="1.1" fill="#D6D8D4"/></pattern></defs>
+<rect width="1200" height="630" fill="#F3F3F0"/><rect width="1200" height="630" fill="url(#d)"/>
 {logo}
-<text x="160" y="129" font-family="Inter" font-weight="600" font-size="30" fill="#1B1B1B">My<tspan fill="#0E6E66">Powerful</tspan>Notes</text>
-<text font-family="Inter Display" font-weight="600" font-size="58" fill="#1B1B1B" letter-spacing="-1.2">
+<text x="160" y="129" font-family="Inter" font-weight="600" font-size="30" fill="#1E242B">My<tspan fill="#0E6E66">Powerful</tspan>Notes</text>
+<text font-family="Inter Display" font-weight="600" font-size="58" fill="#1E242B" letter-spacing="-1.2">
 <tspan x="80" y="262">Handwritten notes on</tspan><tspan x="80" y="330">proper pages, on your</tspan><tspan x="80" y="398">PC and your tablet.</tspan></text>
-<text x="80" y="470" font-family="Inter" font-size="24" fill="#4D5865">Windows and Android. Encrypted on your devices.</text>
+<text x="80" y="470" font-family="Inter" font-size="24" fill="#4A535C">Windows and Android. Encrypted on your devices.</text>
 <g transform="rotate(-2.5 915 380)">{page}</g>
 </svg>'''
     open("/tmp/mpn-og.svg", "w").write(svg)

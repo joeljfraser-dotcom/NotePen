@@ -1,7 +1,7 @@
 # MyPowerfulNotes brand
 
 ## The mark
-An A4 page with a handwritten **M**, finished by a pencil leaning right, on a rounded deep teal tile (Nov 2026).
+An A4 page with three lines of handwriting (graphite, teal, graphite) and a teal stylus finishing the last line, on a rounded graphite tile (Nov 2026). The small version (`mark-small.svg`, for 16 to 48 px) has smoother, heavier lines.
 The page and pen stroke say what the app is: handwriting on proper pages. The earlier blue tile had a four-point
 spark, dropped because it looked too like Gemini's.
 
@@ -25,11 +25,12 @@ The Android launcher icon (adaptive, with a themed version) is drawn from the sa
 ## Colours
 | Name | Hex | Use |
 |---|---|---|
-| Teal | `#0E6E66` | The accent: buttons, links, the M, the "Powerful" in the name |
-| Deep teal | `#0B4F4A` | Tile gradient end, hover |
-| Tile light | `#14857C` | Tile gradient start |
-| Pencil | `#FFB02E` | The pencil (eraser `#F06A6A`, wood `#F6E3C4`, lead `#22303F`) |
-| Paper | `#FFFDF8` | The page in the mark (fold `#E4E1D8`, rules `#E2E4E6`) |
-| Text | `#1B1B1B` | Body text and the name |
-| Secondary text | `#4D5865` | |
-| Desk | `#F2F4F3` | Backgrounds behind paper |
+| Teal | `#0E6E66` | The accent: buttons, links, the stylus, the middle line, the "Powerful" in the name |
+| Teal hover | `#0B4F4A` | Button hover |
+| Graphite tile | `#3A424C` → `#1A1F25` | The tile gradient |
+| Graphite | `#1E242B` | Text, the name, the site footer and the testing banner |
+| Handwriting | `#26323F` | The graphite lines on the page |
+| Stylus | `#0E6E66` | Band `#E9F5F3`, tip `#C9D3D2` |
+| Paper | `#FFFDF8` | The page in the mark (fold `#E4E1D8`) |
+| Secondary text | `#4A535C` | |
+| Desk | `#F3F3F0` | Warm grey behind paper: the hero and tinted sections |
