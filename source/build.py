@@ -90,7 +90,7 @@ def page(path, title, description, current, main):
 # =================================================================================================================
 
 def home():
-    papers = ["Ruled", "Grid", "Dots", "Cornell", "Day planner", "Music", "Isometric", "Your own"]
+    papers = ["Ruled", "Grid", "Dots", "Cornell", "Day planner", "Music", "Isometric", "Three views", "Your own"]
     paper_items = "".join(f"<li>{art.paper(p)}{p}</li>" for p in papers)
     main = f'''
 <section class="hero">
@@ -131,7 +131,7 @@ def home():
 <div class="papers">
 <div>
 <h3>Paper for every job</h3>
-<p>Choose ruled, grid, dot, Cornell, planner, music or isometric paper, or design your own. Pages come in A5 to A0, portrait or landscape, or as one continuous page that keeps going.</p>
+<p>Choose ruled, grid, dot, Cornell, planner, music, isometric or three-view (plan, front and side) paper, or design your own. Pages come in A5 to A0, portrait or landscape, or as one continuous page that keeps going.</p>
 </div>
 <ul class="paper-list">{paper_items}</ul>
 </div>
@@ -143,6 +143,10 @@ def home():
 <li><h3>Photos and pictures</h3><p>Take a photo with your tablet or phone, or add a picture, and write on and around it.</p></li>
 <li><h3>Fill</h3><p>Tap inside a shape you've drawn to colour it in, under the ink.</p></li>
 <li><h3>Talk to text</h3><p>Dictate into a text box using your device's own speech recognition.</p></li>
+<li><h3>Woodwork add-in</h3><p>Parts, materials, cut lists, sheet and board layouts, a drawer planner and proportion guides.</p></li>
+<li><h3>From Fusion 360</h3><p>Bring in a DXF drawing or a parts list (CSV) and carry on drawing over it.</p></li>
+<li><h3>Pocket recordings</h3><p>Bring in Pocket transcripts with their summary, and their action items as flags.</p></li>
+<li><h3>Word and PowerPoint</h3><p>Office on your PC turns a document or deck into pages to write on.</p></li>
 <li><h3>Sections and headers</h3><p>Split notebooks into sections and add a header and footer to every page.</p></li>
 <li><h3>Daily snapshots</h3><p>A snapshot of your notes each day, and backup files that stay encrypted.</p></li>
 </ul>
@@ -164,6 +168,12 @@ def home():
 </figure>
 <figure class="screen">{art.cad_screen()}
 <figcaption><h3>Drawing to scale</h3><p>Draw lines, rectangles and arcs at 1:50 or any scale. Tap a length to type a new one, or a sum such as B + 600. Angles, areas and perimeters update as you go.</p></figcaption>
+</figure>
+<figure class="screen">{art.woodwork_screen()}
+<figcaption><h3>Furniture and cabinets</h3><p>The drawing bar sits under the toolbar or floats where you put it. Draw a carcass with solid, dashed and dotted lines, keep measurements on the drawing as dimensions, and add proportion guides. Then name the parts and give them a material.</p></figcaption>
+</figure>
+<figure class="screen">{art.tablet_cutlist()}
+<figcaption><h3>Cut lists you can write on</h3><p>Make a cut list from the parts, and it arrives as pages: a parts table, sheets laid out with the kerf allowed, rough sizes for solid timber, and a drawer plan sized from the opening and your runners. Open it on the tablet in the workshop and tick things off.</p></figcaption>
 </figure>
 <div class="pair">
 <figure class="screen">{art.map_screen()}

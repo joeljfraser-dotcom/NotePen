@@ -398,6 +398,12 @@ def paper(kind):
             out.append(f'<line x1="{x}" y1="0" x2="{x - H * 1.732}" y2="{H}"/>')
         b.append(f'<clipPath id="iso"><rect x="3" y="3" width="{W - 6}" height="{H - 6}"/></clipPath>'
                  f'<g clip-path="url(#iso)" stroke="#DCE5EE" stroke-width="0.5">{"".join(out)}</g>')
+    elif kind == "Three views":
+        b.append(grid(4, W - 4, 4, H - 4, 5, "#EEF2F6"))
+        b.append(f'<g stroke="#9DB3C8" stroke-width="0.8" fill="none"><line x1="{W / 2}" x2="{W / 2}" y1="6" y2="{H - 6}"/>'
+                 f'<line x1="6" x2="{W - 6}" y1="{H / 2}" y2="{H / 2}"/></g>')
+        for lx, ly, t in ((7, 12, "Plan"), (7, H / 2 + 8, "Front"), (W / 2 + 3, H / 2 + 8, "Side")):
+            b.append(text(lx, ly, t, 5, "#7F95AB", 600))
     elif kind == "Your own":
         b.append(f'<rect x="4" y="4" width="{W - 8}" height="16" fill="#EAF2FC"/>')
         b.append(ruled(8, W - 8, 30, H - 8, 9, "#BFD3E8"))
@@ -411,24 +417,26 @@ def paper(kind):
 def windows_notebook():
     W, H = 1000, 620
     b = []
-    # toolbar
+    # toolbar: places, tools, colours, widths, then undo and the rest (build 52)
     b.append(f'<rect x="0" y="34" width="{W}" height="52" fill="{BAR}"/><line x1="0" x2="{W}" y1="86" y2="86" stroke="{BORDER}"/>')
-    b.append(f'<rect x="14" y="46" width="132" height="28" rx="6" fill="#fff" stroke="#D1D6DC"/>')
-    b.append(icon("NOTEBOOKS", 22, 51, 18))
-    b.append(text(46, 64.5, "Site notes", 12, TEXT, 500))
-    b.append(icon("CHEVRON_DOWN", 124, 53, 14))
-    x = 176
-    for i, name in enumerate(["PEN", "FINELINER", "HIGHLIGHTER", "ERASER", "SELECT", "TEXT", "NOTE", "TABLE", "LINK", "DRAWING", "FLAG"]):
+    x = 18
+    for name in ["SEARCH", "PAGES", "NOTEBOOKS", "MAP"]:
+        b.append(icon(name, x, 50, 20))
+        x += 36
+    b.append(f'<line x1="{x - 4}" x2="{x - 4}" y1="48" y2="72" stroke="{BORDER}"/>')
+    x += 12
+    for i, name in enumerate(["PEN", "FINELINER", "HIGHLIGHTER", "COLOUR", "ERASER", "SELECT", "DRAWING", "NOTE", "TEXT",
+                              "LINK", "FLAG", "TALK", "RULER"]):
         b.append(tool(name, x, 50, on=(i == 0)))
-        x += 40
+        x += 37
     b.append(f'<line x1="{x - 6}" x2="{x - 6}" y1="48" y2="72" stroke="{BORDER}"/>')
-    b.append(swatches(x + 16, 60, 0))
-    x += 16 + 5 * 22 + 8
+    b.append(swatches(x + 12, 60, 0))
+    x += 12 + 5 * 22 + 2
     for i, r in enumerate([1.5, 2.5, 4]):
-        b.append(f'<circle cx="{x + i * 20}" cy="60" r="{r}" fill="{TEXT}"/>')
-    b.append(f'<circle cx="{x + 20}" cy="60" r="9" fill="none" stroke="{ACCENT}" stroke-width="1.6"/>')
-    for i, name in enumerate(["SEARCH", "ACTIONS", "MAP", "MORE"]):
-        b.append(icon(name, W - 170 + i * 40, 50, 20))
+        b.append(f'<circle cx="{x + i * 18}" cy="60" r="{r}" fill="{TEXT}"/>')
+    b.append(f'<circle cx="{x + 18}" cy="60" r="8.5" fill="none" stroke="{ACCENT}" stroke-width="1.6"/>')
+    for i, name in enumerate(["UNDO", "ACTIONS", "MORE"]):
+        b.append(icon(name, W - 116 + i * 36, 50, 20))
     # pages panel
     b.append(f'<rect x="0" y="87" width="176" height="{H - 87}" fill="{BAR}"/><line x1="176" x2="176" y1="87" y2="{H}" stroke="{BORDER}"/>')
     b.append(text(16, 112, "Pages", 13, TEXT, 600))
@@ -637,6 +645,323 @@ def phone_actions():
     b.append(f'<rect x="{sw - 76}" y="{H - 24 - 92}" width="56" height="56" rx="16" fill="{ACCENT}"/>' + icon("PLUS", sw - 60, H - 24 - 76, 24, "#fff", 2))
     return (f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="The Actions list on a phone: tasks taken from tick boxes and flags, '
             f'with due dates, priority and the page each came from">{phone(W, H, "".join(b), "ph1")}</svg>')
+
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Woodwork: the compact drawing bar, a carcass to scale with parts, dimensions, hidden lines and guides
+# ---------------------------------------------------------------------------------------------------------------
+
+GUIDE = "#6FA8DC"
+
+
+def bar_button(x, y, glyph, on=False, w=30, drop=False):
+    """A square icon button on the drawing bar. glyph is an icon name or raw SVG drawn in a 20-unit box."""
+    out = ""
+    if on:
+        out += f'<rect x="{x}" y="{y}" width="{w}" height="30" rx="5" fill="{SOFT}" stroke="{ACCENT}" stroke-width="1"/>'
+    c = ACCENT if on else TEXT
+    if glyph in ICONS:
+        out += icon(glyph, x + (w - 18) / 2 - (3 if drop else 0), y + 6, 18, c)
+    else:
+        out += (f'<g transform="translate({x + (w - 18) / 2 - (3 if drop else 0)} {y + 6}) scale(0.9)" fill="none" stroke="{c}" '
+                f'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">{glyph}</g>')
+    if drop:
+        out += f'<path d="M{x + w - 9} {y + 14} l3 3 l3 -3" stroke="{TEXT2}" stroke-width="1.2" fill="none"/>'
+    return out
+
+
+G_POINTS = '<circle cx="5" cy="15" r="2.4"/><circle cx="15" cy="5" r="2.4"/><path d="M7 13 L13 7" stroke-dasharray="2 2"/>'
+G_GROUP = '<rect x="2" y="2" width="9" height="9"/><rect x="9" y="9" width="9" height="9"/>'
+G_OFFSET = '<path d="M3 6 H17 M3 14 H17"/><path d="M10 6 V14" stroke-dasharray="2 2"/>'
+G_EDIT = '<path d="M4 16 L5 12 L14 3 L17 6 L8 15 Z"/>'
+G_SHAPES = '<rect x="2" y="8" width="9" height="9"/><circle cx="13" cy="7" r="5"/>'
+G_CORNER = '<path d="M3 17 V9 Q3 3 9 3 H17"/><path d="M3 3 H6 M3 3 V6" stroke-dasharray="1.5 1.5"/>'
+G_LINKS = '<path d="M8 12 L12 8"/><path d="M9 6 L11 4 a3.5 3.5 0 0 1 5 5 L14 11"/><path d="M11 14 L9 16 a3.5 3.5 0 0 1 -5 -5 L6 9"/>'
+G_FILL = '<path d="M4 9 L10 3 L16 9 L10 15 Z"/><path d="M16 12 q2 3 0 4 q-2 -1 0 -4" fill="currentColor"/>'
+G_EYE = '<path d="M1 10 Q10 1 19 10 Q10 19 1 10 Z"/><circle cx="10" cy="10" r="2.6"/>'
+G_LIST = '<path d="M6 5 H17 M6 10 H17 M6 15 H17"/><circle cx="2.5" cy="5" r=".8"/><circle cx="2.5" cy="10" r=".8"/><circle cx="2.5" cy="15" r=".8"/>'
+G_WOOD = ('<rect x="2" y="4" width="16" height="12" rx="1"/><path d="M5 8 C8 6.5 12 9.5 15 8 M5 12 C8 10.5 12 13.5 15 12"/>')
+
+
+def dim_h(x1, x2, y, label, ext_from, size=10, color=DIM):
+    """A horizontal dimension at y, with extension lines up or down to ext_from and arrows."""
+    d = 1 if ext_from > y else -1
+    out = [f'<g stroke="{color}" stroke-width="0.8" fill="none">',
+           f'<path d="M{x1} {ext_from - 3 * d} V{y - 4 * d} M{x2} {ext_from - 3 * d} V{y - 4 * d}"/>',
+           f'<path d="M{x1} {y} H{x2}"/>',
+           f'<path d="M{x1 + 6} {y - 2.5} L{x1} {y} L{x1 + 6} {y + 2.5} M{x2 - 6} {y - 2.5} L{x2} {y} L{x2 - 6} {y + 2.5}"/></g>']
+    tw = len(label) * size * 0.58 + 6
+    out.append(f'<rect x="{(x1 + x2) / 2 - tw / 2}" y="{y - size * 0.7}" width="{tw}" height="{size * 1.4}" fill="#fff"/>')
+    out.append(text((x1 + x2) / 2, y + size * 0.36, label, size, color, 500, "middle"))
+    return "".join(out)
+
+
+def dim_v(x, y1, y2, label, ext_from, size=10, color=DIM):
+    d = 1 if ext_from > x else -1
+    out = [f'<g stroke="{color}" stroke-width="0.8" fill="none">',
+           f'<path d="M{ext_from - 3 * d} {y1} H{x - 4 * d} M{ext_from - 3 * d} {y2} H{x - 4 * d}"/>',
+           f'<path d="M{x} {y1} V{y2}"/>',
+           f'<path d="M{x - 2.5} {y1 + 6} L{x} {y1} L{x + 2.5} {y1 + 6} M{x - 2.5} {y2 - 6} L{x} {y2} L{x + 2.5} {y2 - 6}"/></g>']
+    cy = (y1 + y2) / 2
+    tw = len(label) * size * 0.58 + 6
+    out.append(f'<g transform="rotate(-90 {x} {cy})"><rect x="{x - tw / 2}" y="{cy - size * 0.7}" width="{tw}" height="{size * 1.4}" fill="#fff"/>'
+               + text(x, cy + size * 0.36, label, size, color, 500, "middle") + "</g>")
+    return "".join(out)
+
+
+def part_tag(x, y, label, size=9):
+    w = len(label) * size * 0.56 + 10
+    return (f'<rect x="{x - w / 2}" y="{y - size * 0.85}" width="{w}" height="{size * 1.7}" rx="{size * 0.85}" fill="#fff" stroke="#9CCBA3"/>'
+            + text(x, y + size * 0.35, label, size, GREEN, 500, "middle"))
+
+
+def woodwork_screen():
+    W, H = 1000, 676
+    b = []
+    # main toolbar, scale drawing tool on
+    b.append(f'<rect x="0" y="34" width="{W}" height="46" fill="{BAR}"/>')
+    x = 18
+    for name in ["SEARCH", "PAGES", "NOTEBOOKS", "MAP"]:
+        b.append(icon(name, x, 47, 18))
+        x += 32
+    b.append(f'<line x1="{x - 2}" x2="{x - 2}" y1="45" y2="67" stroke="{BORDER}"/>')
+    x += 12
+    for i, name in enumerate(["PEN", "FINELINER", "HIGHLIGHTER", "COLOUR", "ERASER", "SELECT", "DRAWING", "NOTE", "TEXT", "LINK", "FLAG"]):
+        b.append(tool(name, x, 47, on=(name == "DRAWING"), size=18))
+        x += 34
+    for i, name in enumerate(["UNDO", "ACTIONS", "MORE"]):
+        b.append(icon(name, W - 110 + i * 34, 47, 18))
+    # the compact drawing bar, docked under the toolbar
+    b.append(f'<rect x="0" y="80" width="{W}" height="80" fill="#FFFFFF"/><line x1="0" x2="{W}" y1="160" y2="160" stroke="{BORDER}"/>'
+             f'<line x1="0" x2="{W}" y1="80" y2="80" stroke="{BORDER}"/>')
+    y = 87
+    x = 12
+
+    def box(w, label, val=None):
+        nonlocal x
+        o = f'<rect x="{x}" y="{y}" width="{w}" height="30" rx="5" fill="#fff" stroke="#D1D6DC"/>' + text(x + 8, y + 19.5, label, 11.5, TEXT, 500)
+        if val:
+            o += f'<path d="M{x + w - 13} {y + 13} l3 3 l3 -3" stroke="{TEXT2}" stroke-width="1.2" fill="none"/>'
+        x += w + 5
+        return o
+
+    def btn(g, on=False, drop=False, w=30):
+        nonlocal x
+        o = bar_button(x, y, g, on, w + (8 if drop else 0), drop)
+        x += w + (8 if drop else 0) + 3
+        return o
+
+    def sep():
+        nonlocal x
+        o = f'<line x1="{x + 2}" x2="{x + 2}" y1="{y + 4}" y2="{y + 26}" stroke="{BORDER}"/>'
+        x += 8
+        return o
+
+    b.append(box(52, "1:10", True))
+    b.append(box(44, "mm", True))
+    b.append(sep())
+    # pick mode: draw, select, points, groups
+    b.append(f'<rect x="{x - 2}" y="{y - 2}" width="{4 * 33 + 1}" height="34" rx="7" fill="#F3F3F0"/>')
+    b.append(btn("DRAWING", on=True))
+    b.append(btn("SELECT"))
+    b.append(btn(G_POINTS))
+    b.append(btn(G_GROUP))
+    b.append(sep())
+    b.append(box(54, "560"))
+    b.append(box(40, "90°"))
+    b.append(btn("PLUS"))
+    b.append(btn(G_OFFSET))
+    b.append(btn(G_EDIT))
+    b.append(btn("TRASH"))
+    b.append(sep())
+    # line type: a dashed sample
+    b.append(bar_button(x, y, '<path d="M1 10 H5 M8 10 H12 M15 10 H19"/>', False, 38, True)); x += 41
+    b.append(btn(G_SHAPES, drop=True))
+    b.append(btn(G_CORNER))
+    b.append(btn("MOVE", drop=True))
+    b.append(btn("COPY", drop=True))
+    b.append(btn(G_GROUP, drop=True))
+    b.append(btn(G_LINKS))
+    # the bar wraps onto a second row, as it does in the app when the window is narrower than the bar
+    y += 36
+    x = 12
+    b.append(btn("MEASURE"))
+    b.append(btn("AREA"))
+    b.append(btn("SUM"))
+    b.append(btn(G_FILL, drop=True))
+    b.append(btn(G_EYE, drop=True))
+    b.append(btn(G_LIST))
+    b.append(btn(G_WOOD, on=True, drop=True))
+    b.append(btn("MORE"))
+    wood_x = x - 33 - 41
+    # desk and drawing frame
+    b.append(f'<rect x="0" y="161" width="{W}" height="{H - 161}" fill="{DESK}"/>')
+    b.append(f'<rect x="40" y="176" width="920" height="490" fill="#fff" stroke="#D5DBE2"/>')
+    fx, fy, fw, fh = 330, 196, 600, 450
+    b.append(f'<rect x="{fx}" y="{fy}" width="{fw}" height="{fh}" fill="#fff" stroke="#9AA6B2"/>')
+    b.append(grid(fx, fx + fw, fy, fy + fh, 10, "#F1F4F7"))
+    # the carcass at 1:10 (1 mm = 0.5 units): 600 wide, 720 high, 18 mm boards
+    k = 0.5
+    ox, oy = 540, 251
+    cw, ch, t = 600 * k, 720 * k, 18 * k
+    L = []
+    L.append(f'<rect x="{ox}" y="{oy}" width="{cw}" height="{ch}"/>')
+    L.append(f'<rect x="{ox + t}" y="{oy + t}" width="{cw - 2 * t}" height="{ch - 2 * t - 60 * k}"/>')  # inside, over the plinth
+    L.append(f'<path d="M{ox} {oy + ch - 60 * k} H{ox + cw}"/>')  # top of the plinth
+    b.append(f'<g fill="none" stroke="{INK}" stroke-width="1.5">{"".join(L)}</g>')
+    # three drawers: 180, 220, 266 openings with 3 mm gaps
+    ix, iw = ox + t, cw - 2 * t
+    tops = [oy + t]
+    hs = [180, 210, 252]
+    fronts = []
+    yy = oy + t
+    for h in hs:
+        fronts.append((ix + 1.5, yy + 1.5, iw - 3, h * k - 3))
+        yy += h * k
+    for i, (a, b2, c, d) in enumerate(fronts):
+        b.append(f'<rect x="{a}" y="{b2}" width="{c}" height="{d}" fill="#FBFAF7" stroke="{INK}" stroke-width="1.2"/>')
+        b.append(f'<path d="M{a + c / 2 - 30} {b2 + 22} H{a + c / 2 + 30}" stroke="{INK}" stroke-width="3" stroke-linecap="round"/>')
+    # hidden: drawer boxes and runners (dashed)
+    for (a, b2, c, d) in fronts:
+        b.append(f'<rect x="{a + 8}" y="{b2 + 10}" width="{c - 16}" height="{d - 22}" fill="none" stroke="#7D8893" stroke-width="0.9" stroke-dasharray="6 3"/>')
+        b.append(f'<path d="M{a + 2} {b2 + d / 2 + 6} H{a + 8} M{a + c - 8} {b2 + d / 2 + 6} H{a + c - 2}" stroke="#7D8893" stroke-width="2"/>')
+    # proportion guides: golden ratio sections, dotted
+    gy = oy + ch * 0.382
+    b.append(f'<g stroke="{GUIDE}" stroke-width="1" stroke-dasharray="1.5 3" fill="none">'
+             f'<path d="M{ox - 18} {oy + ch * 0.382} H{ox + cw + 18}"/><path d="M{ox - 18} {oy + ch * 0.618} H{ox + cw + 18}"/>'
+             f'<path d="M{ox + cw * 0.382} {oy - 14} V{oy + ch + 14}"/><path d="M{ox + cw * 0.618} {oy - 14} V{oy + ch + 14}"/></g>')
+    # dimensions, offset from the lines
+    b.append(dim_h(ox, ox + cw, oy - 26, "600", oy))
+    b.append(dim_v(ox - 30, oy, oy + ch, "720", ox))
+    yy = oy + t
+    for h in hs:
+        b.append(dim_v(ox + cw + 26, yy, yy + h * k, str(h), ox + cw, 9))
+        yy += h * k
+    # part labels
+    b.append(part_tag(ox + t / 2, oy + ch * 0.5, "Side ×2"))
+    b.append(part_tag(ox + cw / 2, oy + t / 2, "Top"))
+    b.append(part_tag(ox + cw / 2, fronts[1][1] + fronts[1][3] - 16, "Drawer front 2"))
+    b.append(part_tag(ox + cw / 2, oy + ch - 30 * k, "Plinth"))
+    b.append(text(fx + 12, fy + fh - 12, "Bedside cabinet, front · 1:10 · 18 mm birch ply", 10, TEXT2))
+    # the Woodwork menu, open under its button
+    mx, my = wood_x, 160
+    items = ["Make a part (tap inside a shape)…", "Parts in this drawing (9)…", "Plan drawers (tap the opening)…",
+             "Proportion guides", "Make a cut list…", "Materials…", "Import a parts list (CSV)…", "Import a DXF drawing…"]
+    b.append(f'<rect x="{mx}" y="{my + 3}" width="250" height="{len(items) * 30 + 12}" rx="8" fill="#000" opacity="0.06"/>')
+    b.append(f'<rect x="{mx}" y="{my}" width="250" height="{len(items) * 30 + 12}" rx="8" fill="#fff" stroke="#D1D6DC"/>')
+    for i, it in enumerate(items):
+        iy = my + 6 + i * 30
+        if it == "Make a cut list…":
+            b.append(f'<rect x="{mx + 5}" y="{iy}" width="240" height="28" rx="4" fill="{SOFT}"/>')
+        if i in (3, 5):
+            b.append(f'<line x1="{mx + 10}" x2="{mx + 240}" y1="{iy - 1}" y2="{iy - 1}" stroke="#EEF0F3"/>')
+        b.append(text(mx + 16, iy + 18.5, it, 11.5, TEXT))
+    return (f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="Woodwork on Windows: the compact drawing bar under the toolbar, '
+            f'a bedside cabinet drawn at 1:10 with dimensions, dashed hidden drawer boxes, golden ratio guides and part labels, '
+            f'and the Woodwork menu open">{window(W, H, "MyPowerfulNotes - workshop", "".join(b))}</svg>')
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# A cut list page on an Android tablet: parts table and a sheet layout
+# ---------------------------------------------------------------------------------------------------------------
+
+def sheet_layout(x, y, w, parts, sheet=(2400, 1200), trim=10):
+    """parts: (px, py, pw, ph, label) in mm on the sheet. Draws the sheet to fit w units across."""
+    k = w / sheet[0]
+    h = sheet[1] * k
+    out = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="#F4EBDD" stroke="#9A8A72" stroke-width="0.8"/>',
+           f'<rect x="{x + trim * k}" y="{y + trim * k}" width="{w - 2 * trim * k}" height="{h - 2 * trim * k}" fill="none" stroke="#C9B99E" stroke-width="0.5" stroke-dasharray="2 2"/>']
+    for px, py, pw, ph, label in parts:
+        rx, ry, rw, rh = x + px * k, y + py * k, pw * k, ph * k
+        out.append(f'<rect x="{rx:.1f}" y="{ry:.1f}" width="{rw:.1f}" height="{rh:.1f}" fill="#fff" stroke="{INK}" stroke-width="0.8"/>')
+        if rw > 40 and rh > 14:
+            out.append(text(rx + rw / 2, ry + rh / 2 + 3, label, 7.5 if rw > 70 else 6.5, TEXT, 500, "middle"))
+    return "".join(out), h
+
+
+def tablet_cutlist():
+    W, H = 1000, 660
+    sw, sh = W - 40, H - 40
+    b = [f'<rect x="0" y="0" width="{sw}" height="{sh}" fill="{DESK}"/>']
+    b.append(f'<rect x="0" y="0" width="{sw}" height="54" fill="{BAR}"/><line x1="0" x2="{sw}" y1="54" y2="54" stroke="{BORDER}"/>')
+    b.append(icon("LEFT", 14, 16, 22))
+    b.append(text(48, 25, "Workshop", 10.5, TEXT2))
+    b.append(text(48, 41, "Bedside cabinet", 13, TEXT, 600))
+    x = 300
+    for i, name in enumerate(["PEN", "HIGHLIGHTER", "ERASER", "SELECT", "TEXT", "FLAG"]):
+        b.append(tool(name, x, 17, on=(i == 0)))
+        x += 42
+    b.append(swatches(x + 14, 27, 1))
+    b.append(f'<rect x="{sw - 150}" y="14" width="74" height="26" rx="13" fill="#fff" stroke="#D1D6DC"/>')
+    b.append(text(sw - 113, 31, "4 / 4", 11.5, TEXT, 500, anchor="middle"))
+    b.append(icon("MORE", sw - 54, 16, 22))
+    # two pages side by side: the table, and the layout
+    for n, px in enumerate((40, 490)):
+        b.append(page_shadow(px, 70, 430, 530, 1))
+    px, py = 40, 70
+    b.append(text(px + 28, py + 40, "Cut list", 17, TEXT, 600))
+    b.append(text(px + 28, py + 58, "Bedside cabinet, 25 November 2026. Sizes in mm, length first.", 8.5, TEXT2))
+    b.append(text(px + 28, py + 86, "18 mm birch plywood", 12, TEXT, 600))
+    b.append(text(px + 28, py + 100, "18 mm thick, sheets 2400 × 1200. The grain runs along the sheet's length.", 8, TEXT2))
+    rows = [["Part", "Qty", "Length", "Width", "Edges"],
+            ["Side", "2", "720", "450", "Front"], ["Top", "1", "564", "450", "Front"], ["Bottom", "1", "564", "432", ""],
+            ["Plinth", "1", "564", "60", "Front"], ["Drawer front 1", "1", "561", "177", "All"],
+            ["Drawer front 2", "1", "561", "207", "All"], ["Drawer front 3", "1", "561", "251", "All"],
+            ["Back", "1", "684", "564", ""]]
+    cw = [140, 40, 60, 60, 70]
+    ty, rh = py + 114, 19
+    b.append(f'<rect x="{px + 28}" y="{ty}" width="{sum(cw)}" height="{rh}" fill="#EEF0EE"/>')
+    for r, row in enumerate(rows):
+        cx = px + 28
+        for c, cell in enumerate(row):
+            anchor = "end" if c in (1, 2, 3) else "start"
+            tx = cx + cw[c] - 8 if anchor == "end" else cx + 6
+            b.append(text(tx, ty + r * rh + 13, cell, 9, TEXT, 600 if r == 0 else 400, anchor))
+            cx += cw[c]
+        b.append(f'<line x1="{px + 28}" x2="{px + 28 + sum(cw)}" y1="{ty + (r + 1) * rh}" y2="{ty + (r + 1) * rh}" stroke="#D8DCDF" stroke-width="0.6"/>')
+    b.append(text(px + 28, ty + len(rows) * rh + 22, "1 sheet, 78% used (the layout follows).", 9, TEXT))
+    b.append(text(px + 28, ty + len(rows) * rh + 54, "Oak, 20 mm", 12, TEXT, 600))
+    b.append(text(px + 28, ty + len(rows) * rh + 68, "Rough sizes add 3 mm to the thickness, 5 mm to the width and 50 mm to the length.", 8, TEXT2))
+    b.append(text(px + 28, ty + len(rows) * rh + 88, "Top edging  2 × 640 × 25 rough, from one 1800 board", 9, TEXT))
+    b.append(text(px + 28, ty + len(rows) * rh + 118, "Printed and bought", 12, TEXT, 600))
+    b.append(text(px + 28, ty + len(rows) * rh + 136, "Soft-close runners 450 mm  3 pairs", 9, TEXT))
+    b.append(text(px + 28, ty + len(rows) * rh + 152, "Drawer pulls (printed, PETG)  3", 9, TEXT))
+    # handwriting on the cut list
+    b.append(hand(ink.line(px + 300, py + 86, 90, 8, seed=141), BLUE_INK, 1.3))
+    b.append(hand(f"M{px + 24} {py + 198} C{px + 14} {py + 194} {px + 16} {py + 214} {px + 26} {py + 214}", RED, 1.3))
+    # layout page
+    qx = 490
+    b.append(text(qx + 28, py + 40, "18 mm birch plywood", 13, TEXT, 600))
+    b.append(text(qx + 28, py + 58, "Sheet 1 of 1, 78% used. 3.2 mm kerf, 10 mm trimmed off each edge.", 8.5, TEXT2))
+    parts = [(10, 10, 720, 450, "Side"), (733, 10, 720, 450, "Side"), (1456, 10, 684, 564, "Back"),
+             (10, 463, 564, 450, "Top"), (577, 463, 564, 432, "Bottom"), (1144, 577, 561, 251, "Drawer front 3"),
+             (1708, 577, 561, 207, "Drawer front 2"), (1144, 831, 561, 177, "Drawer front 1"), (1708, 787, 564, 60, "Plinth")]
+    lay, lh = sheet_layout(qx + 28, py + 76, 374, parts)
+    b.append(lay)
+    b.append(f'<rect x="{qx + 28 + 1708 * 374 / 2400:.1f}" y="{py + 76 + 850 * 374 / 2400:.1f}" width="{680 * 374 / 2400:.1f}" height="{340 * 374 / 2400:.1f}" fill="#EFE5D3" stroke="#B4A486" stroke-width="0.6" stroke-dasharray="2 2"/>')
+    b.append(text(qx + 28 + 2048 * 374 / 2400, py + 76 + 1030 * 374 / 2400, "Offcut", 6.5, "#7A6A50", 500, "middle"))
+    b.append(text(qx + 28, py + 76 + lh + 22, "Length runs left to right, with the grain.", 8.5, TEXT2))
+    # drawer plan summary
+    b.append(text(qx + 28, py + 324, "Drawers", 13, TEXT, 600))
+    b.append(text(qx + 28, py + 342, "Opening 564 wide, 450 deep. Side-mount runners, 12.7 mm each side.", 8.5, TEXT2))
+    rows2 = [["Drawer", "Front", "Box height", "Box width", "Runner"], ["1", "177", "120", "538", "450"],
+             ["2", "207", "150", "538", "450"], ["3", "251", "190", "538", "450"]]
+    cw2 = [60, 70, 80, 80, 60]
+    ty2 = py + 356
+    b.append(f'<rect x="{qx + 28}" y="{ty2}" width="{sum(cw2)}" height="19" fill="#EEF0EE"/>')
+    for r, row in enumerate(rows2):
+        cx = qx + 28
+        for c, cell in enumerate(row):
+            b.append(text(cx + 6, ty2 + r * 19 + 13, cell, 9, TEXT, 600 if r == 0 else 400))
+            cx += cw2[c]
+        b.append(f'<line x1="{qx + 28}" x2="{qx + 28 + sum(cw2)}" y1="{ty2 + (r + 1) * 19}" y2="{ty2 + (r + 1) * 19}" stroke="#D8DCDF" stroke-width="0.6"/>')
+    b.append(hand(ink.block(qx + 40, py + 460, 300, 2, 22, size=7.5, seed=147), INK, 1.3))
+    b.append(tick_box(qx + 28, py + 494, 10, True))
+    b.append(hand(ink.line(qx + 46, py + 503, 160, 7, seed=149, first_cap=False), INK, 1.25))
+    return (f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="A cut list on an Android tablet: a parts table for 18 mm birch plywood, '
+            f'oak edging and bought runners, a sheet layout showing how the parts fit on one sheet, and a drawer plan, with handwritten notes">'
+            f'{tablet(W, H, "".join(b), "tab2")}</svg>')
 
 
 def sync_diagram():
