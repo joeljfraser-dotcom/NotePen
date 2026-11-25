@@ -164,6 +164,13 @@ def windows_assets(folder):
     place("Square44x44Logo.targetsize-24_altform-unplated.png", 24, 24, 24, small)
     place("StoreLogo.png", 50, 50, 50, small)
     place("LockScreenLogo.scale-200.png", 48, 48, 44, small)
+    place("Square44x44Logo.targetsize-48_altform-lightunplated.png", 48, 48, 48, small)
+    # The .exe icon: the small mark up to 48 px, the full mark above.
+    sizes = []
+    for size in (16, 24, 32, 48, 64, 128, 256):
+        render(small if size <= 48 else big, f"{tmp}/i{size}.png", size)
+        sizes.append(f"{tmp}/i{size}.png")
+    run(["convert", *sizes, os.path.join(folder, "AppIcon.ico")])
 
 
 def main():
