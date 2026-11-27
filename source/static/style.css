@@ -136,6 +136,12 @@ p { margin: 0 0 1em; }
 .platform h3 { font-size: 21px; margin-bottom: 10px; }
 .platform ul { margin: 14px 0 0; padding-left: 20px; color: var(--text-2); }
 .platform li { margin: 6px 0; }
+.platform { display: flex; flex-direction: column; }
+.platform .get { margin-top: auto; padding-top: 28px; }
+.platform .testing { margin: 0 0 16px; color: var(--text-2); font-size: 15px; }
+.platform .tag { display: inline-block; margin-right: 8px; padding: 2px 9px; border-radius: 999px; background: var(--ink-soft); color: var(--ink-strong); font-size: 13px; font-weight: 600; }
+.platform .small { margin: 14px 0 0; font-size: 14px; color: var(--text-2); }
+.platform .small a { color: var(--ink); }
 .status { margin-top: 56px; display: flex; gap: 28px; align-items: center; flex-wrap: wrap; justify-content: space-between; padding: 28px 32px; border-radius: 12px; background: var(--graphite); color: #fff; }
 .status p { margin: 0; max-width: 60ch; }
 .status strong { display: block; font-size: 19px; margin-bottom: 4px; }

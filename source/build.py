@@ -103,7 +103,7 @@ def home():
 <a class="button primary" href="#features">See what it does</a>
 <a class="button quiet" href="/try">Try it in your browser</a>
 </div>
-<p class="note">For Windows 11 and Android 11 or later. Free while it's being tested.</p>
+<p class="note">For Windows 11 and Android 11 or later. Free while it's being tested. <a href="#get">Get the app</a></p>
 </div>
 <div class="hero-page">{art.hero_page()}</div>
 </div>
@@ -223,6 +223,9 @@ def home():
 <li>Reads your handwriting so you can search it</li>
 <li>Shows a code to link your tablet or phone</li>
 </ul>
+<div class="get">
+<a class="button primary" href="https://apps.microsoft.com/detail/9P869197H6GC">Get it from the Microsoft Store</a>
+</div>
 </div>
 <div class="platform">
 <h3>Android</h3>
@@ -232,10 +235,15 @@ def home():
 <li>Unlock with your fingerprint, face or PIN</li>
 <li>Scan the code on your PC to set up in a minute</li>
 </ul>
+<div class="get">
+<p class="testing"><span class="tag">Closed testing</span>The Android app is in closed testing on Google Play. Ask to join and we'll add you to the testers' list, then send you the link.</p>
+<a class="button primary" href="mailto:mypowerfulnotes@gmail.com?subject=Sign%20me%20up%20to%20test%20MyPowerfulNotes%20on%20Android&amp;body=Hi%2C%0A%0AI%27d%20like%20to%20test%20MyPowerfulNotes%20on%20Android.%0A%0AThe%20email%20address%20of%20the%20Google%20account%20on%20my%20Android%20device%20%28the%20one%20signed%20in%20to%20Google%20Play%29%3A%0A%0A%0AWhy%20I%27m%20interested%20in%20MyPowerfulNotes%3A%0A%0A%0AMy%20device%20%28optional%29%3A%0A%0A">Sign up to test on Android</a>
+<p class="small">The button opens an email to <a href="mailto:mypowerfulnotes@gmail.com">mypowerfulnotes@gmail.com</a>. Tell us the email address of the Google account on your Android device, and why you're interested. Already on the list? <a href="https://play.google.com/apps/testing/com.mypowerfulnotes.app">Join the test on Google Play</a>.</p>
 </div>
 </div>
-<div class="status">
-<p><strong>Being tested now</strong>MyPowerfulNotes is in testing and free to use. It's planned for the Microsoft Store and Google Play.</p>
+</div>
+<div class="status" id="get">
+<p><strong>Being tested now</strong>MyPowerfulNotes is free while it's being tested. The Windows app is on the Microsoft Store. The Android app is in closed testing in the Google Play Console: Google asks for a group of testers to use it for two weeks before it can be released to everyone on Google Play.</p>
 <a class="button" href="/support">Get help or send feedback</a>
 </div>
 </div>
